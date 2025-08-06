@@ -6,8 +6,8 @@ import { Ionicons } from '@expo/vector-icons';
 export default function GalleryScreen() {
   return (
     <View style={styles.container}>
-      <Ionicons name="home-outline" size={100} color={themes.colors.primary} />
-      <Text style={styles.title}>Minha Galeria</Text>
+      <Ionicons name="house-outline" size={100} color={themes.colors.primary} />
+      <Text style={styles.title}>Home</Text>
     </View>
   );
 }
