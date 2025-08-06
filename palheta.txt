@@ -1,0 +1,29 @@
+Cor Primária (Azul Claro ou Verde Menta):
+
+Azul Claro: #A2DFF7
+
+Verde Menta: #A0E7D9
+
+Cor Secundária (Amarelo Claro ou Laranja Suave):
+
+Amarelo Claro: #FFEB7D
+
+Laranja Suave: #FFB897
+
+Cor de Destaque (Roxo Lavanda ou Pêssego):
+
+Roxo Lavanda: #B19CD9
+
+Pêssego: #FF8C94
+
+Cor de Fundo (Branco Neve ou Cinza Claro):
+
+Branco Neve: #F9F9F9
+
+Cinza Claro: #D3D3D3
+
+Textos:
+
+Cinza Escuro: #4A4A4A
+
+Preto Suave: #333333
