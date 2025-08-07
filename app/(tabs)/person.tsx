@@ -1,8 +1,9 @@
 // app/(tabs)/person.tsx
 import React from 'react';
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
-import { useRouter } from 'expo-router';
 import { themes } from '../../src/global/themes';
+import { Ionicons, FontAwesome } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 
 // Simular os membros da família
 const familyMembers = [
@@ -32,8 +33,17 @@ const PersonCard = ({ item }) => {
 
 
 export default function PersonScreen() {
+    const router = useRouter();
   return (
     <View style={styles.container}>
+      <TouchableOpacity
+              style={styles.perfilButton}
+              onPress={() => router.push('/perfil')}
+            >
+              <FontAwesome name="user-circle" size={28} color={themes.colors.primary} />
+      </TouchableOpacity>
+
+
       <Text style={styles.title}>Membros da Família</Text>
       
       {/* Usando FlatList para renderizar a lista de pessoas */}
@@ -81,5 +91,11 @@ const styles = StyleSheet.create({
     fontSize: themes.typography.body,
     fontWeight: '600',
     color: themes.colors.text,
+  },
+  perfilButton: {
+    position: "absolute",
+    top: 20, 
+    right: 20,
+    padding: 10, 
   },
 });

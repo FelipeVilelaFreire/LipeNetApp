@@ -3,14 +3,15 @@ import { View, Text, StyleSheet, Button } from 'react-native';
 import { useRouter } from 'expo-router';
 import { themes } from '../../src/global/themes';
 import { Ionicons } from '@expo/vector-icons';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+
 
 export default function PersonScreen() {
   const router = useRouter();
 
   const handleLogout = () => {
-    // Limpa qualquer dado de autenticação salvo
-    // e volta para a tela de login.
-    router.replace('/'); // Usa replace para não poder voltar para a tela de perfil
+
+    router.replace('/');  
   };
 
   return (

@@ -1,11 +1,20 @@
-// app/(tabs)/upload.tsx
-import { View, Text, StyleSheet, Button } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity,Button } from 'react-native';
 import { themes } from '../../src/global/themes';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, FontAwesome } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+
 
 export default function UploadScreen() {
+  const router = useRouter();
   return (
     <View style={styles.container}>
+      <TouchableOpacity
+                    style={styles.perfilButton}
+                    onPress={() => router.push('/perfil')}
+                  >
+                    <FontAwesome name="user-circle" size={28} color={themes.colors.primary} />
+      </TouchableOpacity>
       <Ionicons name="cloud-upload-outline" size={80} color={themes.colors.primary} />
       <Text style={styles.title}>Enviar Mídia</Text>
       <Text style={styles.subtitle}>Escolha uma foto ou vídeo da sua galeria para compartilhar com a família.</Text>
@@ -34,5 +43,11 @@ const styles = StyleSheet.create({
     marginTop: themes.spacing.small,
     marginBottom: themes.spacing.xlarge,
     textAlign: 'center',
+  },
+  perfilButton: {
+    position: "absolute",
+    top: 20, 
+    right: 20,
+    padding: 10, 
   },
 });

@@ -1,12 +1,23 @@
 // app/(tabs)/search.tsx
 import React from 'react';
-import { View, Text, StyleSheet, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TextInput,TouchableOpacity } from 'react-native';
 import { themes } from '../../src/global/themes';
 import { Feather } from '@expo/vector-icons';
+import { Ionicons, FontAwesome } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 
 export default function SearchScreen() {
+  const router = useRouter();
+
+  
   return (
     <View style={styles.container}>
+      <TouchableOpacity
+              style={styles.perfilButton}
+              onPress={() => router.push('/perfil')}
+            >
+              <FontAwesome name="user-circle" size={28} color={themes.colors.primary} />
+      </TouchableOpacity>
       <Text style={styles.title}>Buscar</Text>
       <View style={styles.searchContainer}>
         <Feather name="search" size={20} color={themes.colors.textSecondary} style={styles.searchIcon} />
@@ -53,5 +64,11 @@ const styles = StyleSheet.create({
     marginTop: themes.spacing.large,
     textAlign: 'center',
     color: themes.colors.textSecondary,
-  }
+  },
+  perfilButton: {
+    position: "absolute",
+    top: 20, 
+    right: 20,
+    padding: 10, 
+  },
 });
