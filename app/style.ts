@@ -61,7 +61,7 @@ export const style = StyleSheet.create({
         elevation: 5,
     },
     inputIcon: {
-        paddingHorizontal: themes.spacing.medium,
+        paddingHorizontal: themes.spacing.small,
     },
     input: {
         flex: 1,
@@ -133,7 +133,7 @@ export const style = StyleSheet.create({
     },
     footerContainer: {
         width: '100%',
-        marginTop: 'auto', // Truque para empurrar para o final
+        marginTop: 40, // Truque para empurrar para o final
         paddingBottom: 40, // Espaço na parte de baixo
     },
 });

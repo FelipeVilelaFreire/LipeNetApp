@@ -47,7 +47,7 @@ export default function LoginScreen() { // Renomeado para mais clareza
             return;
         }
         // Navegação real para o grupo de abas após o login
-        router.replace('/gallery');
+        router.replace('/home');
     };
 
     const handleRegisterPress = () => {

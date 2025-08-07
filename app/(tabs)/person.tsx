@@ -1,30 +1,49 @@
 // app/(tabs)/person.tsx
-import { View, Text, StyleSheet, Button } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { themes } from '../../src/global/themes';
-import { Ionicons } from '@expo/vector-icons';
 
-export default function PersonScreen() {
+// Simular os membros da família
+const familyMembers = [
+  { id: '1', name: 'João Silva', profilePictureUrl: 'https://picsum.photos/seed/1/200' },
+  { id: '2', name: 'Maria Oliveira', profilePictureUrl: 'https://picsum.photos/seed/2/200' },
+  { id: '3', name: 'Carlos Pereira', profilePictureUrl: 'https://picsum.photos/seed/3/200' },
+  { id: '4', name: 'Ana Souza', profilePictureUrl: 'https://picsum.photos/seed/4/200' },
+  { id: '5', name: 'Pedro Santos', profilePictureUrl: 'https://picsum.photos/seed/5/200' },
+  { id: '6', name: 'Lúcia Costa', profilePictureUrl: 'https://picsum.photos/seed/6/200' },
+];
+// Componente para renderizar cada item da lista (boa prática)
+const PersonCard = ({ item }) => {
   const router = useRouter();
 
-  const handleLogout = () => {
-    // Limpa qualquer dado de autenticação salvo
-    // e volta para a tela de login.
-    router.replace('/'); // Usa replace para não poder voltar para a tela de perfil
+  const handlePress = () => {
+    console.log(`Navegando para o perfil de ${item.name} com ID: ${item.id}`);
+    alert(`Você clicou no perfil de ${item.name}`);
   };
 
+  return ( //Deixar a imagem oculta
+    <TouchableOpacity style={styles.cardContainer} onPress={handlePress}>
+      <Image source={{ uri: item.profilePictureUrl }} style={styles.profileImage} />
+      <Text style={styles.personName}>{item.name}</Text>
+    </TouchableOpacity>
+  );
+};
+
+
+export default function PersonScreen() {
   return (
     <View style={styles.container}>
-      <Ionicons name="person-circle-outline" size={100} color={themes.colors.primary} />
-      <Text style={styles.title}>Meu Perfil</Text>
-      <Text style={styles.subtitle}>emaildousuario@exemplo.com</Text>
+      <Text style={styles.title}>Membros da Família</Text>
       
-      <View style={styles.buttonContainer}>
-        <Button title="Editar Perfil" onPress={() => {}} />
-        <View style={{marginTop: 10}}>
-          <Button title="Sair (Logout)" color={themes.colors.error} onPress={handleLogout} />
-        </View>
-      </View>
+      {/* Usando FlatList para renderizar a lista de pessoas */}
+      <FlatList
+        data={familyMembers}
+        renderItem={({ item }) => <PersonCard item={item} />}
+        keyExtractor={item => item.id}
+        numColumns={2} // Organiza a lista em duas colunas, criando um grid
+        contentContainerStyle={styles.listContainer}
+      />
     </View>
   );
 }
@@ -32,23 +51,35 @@ export default function PersonScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: themes.spacing.large,
+    paddingTop: 60, // Espaço para o cabeçalho (se houver)
+    paddingHorizontal: themes.spacing.medium,
     backgroundColor: themes.colors.background,
   },
   title: {
     fontSize: themes.typography.h1,
     fontWeight: 'bold',
     color: themes.colors.text,
-    marginTop: themes.spacing.medium,
+    marginBottom: themes.spacing.large,
+    paddingHorizontal: themes.spacing.small,
   },
-  subtitle: {
+  listContainer: {
+    alignItems: 'center',
+    gap: 5,
+  },
+  cardContainer: {
+    alignItems: 'center',
+    margin: themes.spacing.small,
+    width: 150, // Largura fixa para cada card
+  },
+  profileImage: {
+    width: 120,
+    height: 120,
+    borderRadius: 60, // Deixa a imagem redonda
+    marginBottom: themes.spacing.medium,
+  },
+  personName: {
     fontSize: themes.typography.body,
-    color: themes.colors.textSecondary,
-    marginBottom: themes.spacing.xlarge,
+    fontWeight: '600',
+    color: themes.colors.text,
   },
-  buttonContainer: {
-    width: '80%',
-  }
 });

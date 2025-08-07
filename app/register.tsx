@@ -1,6 +1,6 @@
-// app/index.tsx
-import React, { useState, useRef, useEffect, useCallback } from 'react'; // Trocamos useFocusEffect por useEffect
-import { useRouter } from 'expo-router'; // Importamos o hook para navegação
+// app/register.tsx
+import React, { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'expo-router';
 import {
     Text,
     View,
@@ -9,27 +9,27 @@ import {
     Animated,
     KeyboardAvoidingView,
     Platform,
-    Pressable
+    Pressable,
+    Alert
 } from 'react-native';
-import { style } from "./style"; // Assumindo que style.ts está na mesma pasta
-import { themes } from "../src/global/themes"; // Ajuste o caminho se necessário
+import { style } from "./style"; // Reutilizando o mesmo estilo do login
+import { themes } from "../src/global/themes";
 import { Feather } from '@expo/vector-icons';
 
-export default function LoginScreen() { // Renomeado para mais clareza
-    // --- Hooks de Estado (perfeitos, sem alterações) ---
+export default function RegisterScreen() {
+    // --- Novos estados para os campos de registro ---
+    const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
-    const [senhaconfirmada, setSenhaconfirmada] = useState("");
+    const [senhaConfirmada, setSenhaConfirmada] = useState("");
     const [error, setError] = useState("");
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-    const [focusedInput, setFocusedInput] = useState<null | 'email' | 'senha'>(null);
+    const [isConfirmationPasswordVisible, setIsConfirmationPasswordVisible] = useState(false);
+    const [focusedInput, setFocusedInput] = useState<null | 'username' | 'email' | 'senha' | 'senhaConfirmada'>(null);
 
     const router = useRouter();
-
     const fadeAnim = useRef(new Animated.Value(0)).current;
 
-    // Usamos useEffect com array vazio. A animação rodará uma vez quando a tela montar.
-    // Como esta é a primeira tela de um Stack, é mais apropriado que useFocusEffect.
     useEffect(() => {
         Animated.timing(fadeAnim, {
             toValue: 1,
@@ -38,19 +38,35 @@ export default function LoginScreen() { // Renomeado para mais clareza
         }).start();
     }, []);
 
-    // --- Funções de Ação ---
+    // --- Lógica de Registro Refatorada ---
     const handleRegister = () => {
-        setError("");
-        if (!email || !senha) {
+        setError(""); // Limpa erros anteriores
+
+        // 1. Validação de campos vazios
+        if (!username || !email || !senha || !senhaConfirmada) {
             setError("Por favor, preencha todos os campos.");
             return;
         }
-        if (senha != senhaconfirmada) {
-            setError("Por favor, preencha todos os campos.");
+
+        // 2. Validação de senhas
+        if (senha !== senhaConfirmada) {
+            setError("As senhas não coincidem. Tente novamente.");
             return;
         }
-        // Navegação para a aba de login
-        router.replace('/');
+
+        // 3. Validação de tamanho da senha (exemplo)
+        if (senha.length < 6) {
+            setError("A senha deve ter pelo menos 6 caracteres.");
+            return;
+        }
+
+        // Se tudo estiver OK, simula o sucesso
+        console.log(`Novo usuário: ${username}, Email: ${email}`);
+        Alert.alert(
+            "Cadastro Realizado!",
+            "Sua conta foi criada com sucesso. Você será redirecionado para o login.",
+            [{ text: "OK", onPress: () => router.replace('/') }]
+        );
     };
 
     return (
@@ -59,14 +75,31 @@ export default function LoginScreen() { // Renomeado para mais clareza
             behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
             <Animated.View style={[style.container, { opacity: fadeAnim }]}>
-                
-                <View style={style.mainContent}>
+                <View style={style.contentContainer}>
+
                     <View style={style.headerContainer}>
-                        <Text style={style.logo}>Family TV</Text>
-                        <Text style={style.welcomeText}>Bem-vindo à sua família!</Text>
+                        <Text style={style.logo}>Crie sua Conta</Text>
+                        <Text style={style.welcomeText}>Junte-se à família Family TV!</Text>
                     </View>
 
                     <View style={style.formContainer}>
+                        {/* NOVO CAMPO DE USERNAME */}
+                        <Text style={style.inputLabel}>Nome de Usuário</Text>
+                        <View style={[style.inputContainer, focusedInput === 'username' && style.inputContainerFocused]}>
+                            <Feather name="user" size={20} color={themes.colors.textSecondary} style={style.inputIcon} />
+                            <TextInput
+                                style={style.input}
+                                placeholder="Como você quer ser chamado?"
+                                placeholderTextColor={themes.colors.textSecondary}
+                                autoCapitalize="none"
+                                value={username}
+                                onChangeText={setUsername}
+                                onFocus={() => setFocusedInput('username')}
+                                onBlur={() => setFocusedInput(null)}
+                            />
+                        </View>
+
+                        {/* CAMPO DE EMAIL */}
                         <Text style={style.inputLabel}>Endereço de e-mail</Text>
                         <View style={[style.inputContainer, focusedInput === 'email' && style.inputContainerFocused]}>
                             <Feather name="mail" size={20} color={themes.colors.textSecondary} style={style.inputIcon} />
@@ -83,12 +116,13 @@ export default function LoginScreen() { // Renomeado para mais clareza
                             />
                         </View>
 
+                        {/* CAMPO DE SENHA */}
                         <Text style={style.inputLabel}>Senha</Text>
                         <View style={[style.inputContainer, focusedInput === 'senha' && style.inputContainerFocused]}>
                              <Feather name="lock" size={20} color={themes.colors.textSecondary} style={style.inputIcon} />
                             <TextInput
                                 style={style.input}
-                                placeholder="Sua senha secreta"
+                                placeholder="Crie uma senha segura"
                                 placeholderTextColor={themes.colors.textSecondary}
                                 secureTextEntry={!isPasswordVisible}
                                 autoCapitalize="none"
@@ -102,30 +136,33 @@ export default function LoginScreen() { // Renomeado para mais clareza
                             </Pressable>
                         </View>
 
-                        <Text style={style.inputLabel}>Confirme a senha</Text>
-                        <View style={[style.inputContainer, focusedInput === 'senha' && style.inputContainerFocused]}>
-                             <Feather name="lock" size={20} color={themes.colors.textSecondary} style={style.inputIcon} />
+                        {/* CAMPO DE CONFIRMAR SENHA */}
+                        <Text style={style.inputLabel}>Confirme a Senha</Text>
+                        <View style={[style.inputContainer, focusedInput === 'senhaConfirmada' && style.inputContainerFocused]}>
+                             <Feather name="check-circle" size={20} color={themes.colors.textSecondary} style={style.inputIcon} />
                             <TextInput
                                 style={style.input}
-                                placeholder="Confirme sua senha secreta"
+                                placeholder="Digite a senha novamente"
                                 placeholderTextColor={themes.colors.textSecondary}
-                                secureTextEntry={!isPasswordVisible}
+                                secureTextEntry={!isConfirmationPasswordVisible}
                                 autoCapitalize="none"
-                                value={senha}
-                                onChangeText={setSenhaconfirmada}
-                                onFocus={() => setFocusedInput('senha')}
+                                value={senhaConfirmada}
+                                onChangeText={setSenhaConfirmada}
+                                onFocus={() => setFocusedInput('senhaConfirmada')}
                                 onBlur={() => setFocusedInput(null)}
                             />
-                            <Pressable onPress={() => setIsPasswordVisible(!isPasswordVisible)} style={style.passwordToggle}>
-                                <Feather name={isPasswordVisible ? "eye-off" : "eye"} size={20} color={themes.colors.textSecondary} />
+                        <Pressable onPress={() => setIsConfirmationPasswordVisible(!isConfirmationPasswordVisible)} style={style.passwordToggle}>
+                                <Feather name={isConfirmationPasswordVisible ? "eye-off" : "eye"} size={20} color={themes.colors.textSecondary} />
                             </Pressable>
                         </View>
                     </View>
-                </View>
 
-                <TouchableOpacity style={style.registerButton} activeOpacity={0.8} onPress={handleRegister}>
-                    <Text style={style.registerButtonText}>Registre-se</Text>
-                </TouchableOpacity>
+                    {error ? <Text style={style.errorText}>{error}</Text> : null}
+
+                    <TouchableOpacity style={style.button} activeOpacity={0.7} onPress={handleRegister}>
+                        <Text style={style.buttonText}>Cadastrar</Text>
+                    </TouchableOpacity>
+                </View>
             </Animated.View>
         </KeyboardAvoidingView>
     );
