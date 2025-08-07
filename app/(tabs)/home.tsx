@@ -3,18 +3,14 @@ import { View, Text, StyleSheet, Button, TouchableOpacity} from 'react-native';
 import { themes } from '../../src/global/themes';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import {UserComponent} from "../../src/components/user";
 
 
 export default function GalleryScreen() {
   const router = useRouter();
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.perfilButton}
-        onPress={() => router.push('/perfil')}
-      >
-        <FontAwesome name="user-circle" size={28} color={themes.colors.primary} />
-      </TouchableOpacity>
+      <UserComponent/>
       <Ionicons name="home-outline" size={100} color={themes.colors.primary} />
       <Text style={styles.title}>Home</Text>
     </View>

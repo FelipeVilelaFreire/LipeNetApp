@@ -5,19 +5,16 @@ import { themes } from '../../src/global/themes';
 import { Feather } from '@expo/vector-icons';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import {UserComponent} from "../../src/components/user";
+
 
 export default function SearchScreen() {
   const router = useRouter();
 
-  
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-              style={styles.perfilButton}
-              onPress={() => router.push('/perfil')}
-            >
-              <FontAwesome name="user-circle" size={28} color={themes.colors.primary} />
-      </TouchableOpacity>
+      <UserComponent />
       <Text style={styles.title}>Buscar</Text>
       <View style={styles.searchContainer}>
         <Feather name="search" size={20} color={themes.colors.textSecondary} style={styles.searchIcon} />
